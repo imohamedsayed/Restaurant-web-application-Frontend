@@ -5,6 +5,7 @@ import UserSignup from "../views/website/Signup.vue";
 import NotFound from "../views/NotFound.vue";
 import Home from "../views/website/Home.vue";
 import Menu from "../views/website/Menu.vue";
+import Cart from "../views/website/Cart.vue";
 const routes = [
   {
     path: "/",
@@ -47,6 +48,14 @@ const routes = [
     component: Menu,
     meta: {
       title: "Menu page",
+    },
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    meta: {
+      title: "Cart page",
     },
   },
   /*

@@ -8,10 +8,10 @@
       <i class="fa-solid fa-utensils"></i>
       <span>Menu</span>
     </router-link>
-    <a href="#">
+    <router-link :to="{ name: 'Cart' }">
       <i class="fa-solid fa-cart-shopping"></i>
       <span>Cart</span>
-    </a>
+    </router-link>
     <a href="#">
       <i class="fa-solid fa-receipt"></i>
       <span>Bills</span>
