@@ -1,25 +1,73 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-
+import { createRouter, createWebHistory } from "vue-router";
+import HomeView from "../views/LandingPage.vue";
+import UserLogin from "../views/website/login.vue";
+import UserSignup from "../views/website/Signup.vue";
+import NotFound from "../views/NotFound.vue";
+import Home from "../views/website/Home.vue";
+import Menu from "../views/website/Menu.vue";
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: "/",
+    name: "Landing",
+    component: HomeView,
+    meta: {
+      title: "Welcome",
+    },
+  },
+  /*
+    -->> Website Routes
+  */
+  {
+    path: "/login",
+    name: "UserLogin",
+    component: UserLogin,
+    meta: {
+      title: "Login",
+    },
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: "/signup",
+    name: "UserSignup",
+    component: UserSignup,
+    meta: {
+      title: "Sign Up",
+    },
+  },
+  {
+    path: "/home",
+    name: "HomePage",
+    component: Home,
+    meta: {
+      title: "Home page",
+    },
+  },
+  {
+    path: "/menu",
+    name: "Menu",
+    component: Menu,
+    meta: {
+      title: "Menu page",
+    },
+  },
+  /*
+    --> 404 Page
+  */
+  {
+    path: "/:catchAll(.*)",
+    name: "NotFound",
+    component: NotFound,
+    meta: {
+      title: "404 Not Found",
+    },
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
-
-export default router
+  routes,
+});
+router.beforeEach((to, from, next) => {
+  document.title = `${to.meta.title} | MSO Restaurant`;
+  next();
+});
+export default router;

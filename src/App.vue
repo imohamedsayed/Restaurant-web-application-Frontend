@@ -1,9 +1,5 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <style lang="scss">
@@ -11,8 +7,23 @@
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+}
+
+body {
+  overflow-x: hidden;
+}
+:root {
+  --light-orange: #fa942a;
+  --dark-orange: #ea5223;
+}
+
+.has-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.has-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--dark-orange);
+  padding: 10px 0;
+  border-radius: 25px;
 }
 
 nav {
