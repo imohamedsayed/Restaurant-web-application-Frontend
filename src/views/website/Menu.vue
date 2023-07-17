@@ -35,6 +35,11 @@ export default {
     border-radius: 20px;
     padding: 20px;
     overflow: auto;
+    @media (max-width: 572px) {
+      padding-bottom: 60px;
+      border-radius: 0px;
+      margin: 0;
+    }
     .row {
       margin-top: 100px;
     }

@@ -18,10 +18,19 @@
             data-bs-toggle="dropdown"
           ></i>
           <ul class="dropdown-menu me-5">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
             <li>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <router-link
+                :to="{ name: 'Settings' }"
+                class="dropdown-item"
+                href="#"
+              >
+                <i class="fa-solid fa-user me-2"></i> Profile</router-link
+              >
+            </li>
+            <li>
+              <a class="dropdown-item text-danger fw-bold" href="#">
+                <i class="fa-solid fa-door-open fa-bounce me-2"></i>Logout</a
+              >
             </li>
           </ul>
         </span>
@@ -36,10 +45,18 @@ export default {};
 
 <style lang="scss" scoped>
 header {
+  @media (max-width: 461px) {
+    flex-direction: column-reverse;
+    gap: 20px;
+    justify-content: flex-end;
+  }
   .search {
     flex: 1;
     max-width: 40%;
     position: relative;
+    @media (max-width: 461px) {
+      max-width: 100%;
+    }
     &::after {
       font-family: "Font Awesome 6 Free";
       content: "\f002";

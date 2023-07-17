@@ -4,13 +4,9 @@
     <main class="has-scrollbar">
       <Header />
       <div class="container">
-        <div class="categories">
-          <h2 class="fw-bold mb-2">Choose Category</h2>
-          <div class="row nav nav-tabs" id="myTab" role="tablist">
-            <CategoryBox />
-          </div>
-          <div class="tab-content" id="myTabContent">
-            <CategoryMenu />
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-12 mb-4">
+            <Bill />
           </div>
         </div>
       </div>
@@ -21,10 +17,10 @@
 <script>
 import SideBar from "@/components/website/SideBar.vue";
 import Header from "@/components/website/Header.vue";
-import CategoryBox from "@/components/website/home/CategoryBox.vue";
-import CategoryMenu from "@/components/website/home/CategoryMenu.vue";
+import Bill from "@/components/website/bills/Bill.vue";
+
 export default {
-  components: { SideBar, Header, CategoryBox, CategoryMenu },
+  components: { SideBar, Header, Bill },
 };
 </script>
 

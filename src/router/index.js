@@ -6,6 +6,8 @@ import NotFound from "../views/NotFound.vue";
 import Home from "../views/website/Home.vue";
 import Menu from "../views/website/Menu.vue";
 import Cart from "../views/website/Cart.vue";
+import Bills from "../views/website/Bills.vue";
+import Settings from "../views/website/Settings.vue";
 const routes = [
   {
     path: "/",
@@ -56,6 +58,22 @@ const routes = [
     component: Cart,
     meta: {
       title: "Cart page",
+    },
+  },
+  {
+    path: "/bills",
+    name: "Bills",
+    component: Bills,
+    meta: {
+      title: "Bills page",
+    },
+  },
+  {
+    path: "/settings",
+    name: "Settings",
+    component: Settings,
+    meta: {
+      title: "Settings page",
     },
   },
   /*
