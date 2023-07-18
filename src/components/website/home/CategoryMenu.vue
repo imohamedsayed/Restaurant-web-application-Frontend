@@ -69,6 +69,84 @@
           </div>
         </div>
       </div>
+       <div class="col-lg-3 col-md-6 col-12">
+        <div class="menu-item">
+          <div class="img">
+            <img
+              src="../../../assets/dishes/shrimp.jpg"
+              class="img-fluid mb-2"
+              alt=""
+            />
+          </div>
+          <div
+            class="details mt-2 d-flex align-items-center justify-content-between"
+          >
+            <div class="info">
+              <h6 class="fw-bold">Boiled Shrimp</h6>
+
+              <p class="price fw-bold">
+                $12.62
+                <span class="text-secondary"><sub>/per portion</sub></span>
+              </p>
+            </div>
+            <div class="order me-4">
+              <i class="fa-solid fa-cart-plus"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="col-lg-3 col-md-6 col-12">
+        <div class="menu-item">
+          <div class="img">
+            <img
+              src="../../../assets/dishes/shrimp.jpg"
+              class="img-fluid mb-2"
+              alt=""
+            />
+          </div>
+          <div
+            class="details mt-2 d-flex align-items-center justify-content-between"
+          >
+            <div class="info">
+              <h6 class="fw-bold">Boiled Shrimp</h6>
+
+              <p class="price fw-bold">
+                $12.62
+                <span class="text-secondary"><sub>/per portion</sub></span>
+              </p>
+            </div>
+            <div class="order me-4">
+              <i class="fa-solid fa-cart-plus"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+       <div class="col-lg-3 col-md-6 col-12">
+        <div class="menu-item">
+          <div class="img">
+            <img
+              src="../../../assets/dishes/shrimp.jpg"
+              class="img-fluid mb-2"
+              alt=""
+            />
+          </div>
+          <div
+            class="details mt-2 d-flex align-items-center justify-content-between"
+          >
+            <div class="info">
+              <h6 class="fw-bold">Boiled Shrimp</h6>
+
+              <p class="price fw-bold">
+                $12.62
+                <span class="text-secondary"><sub>/per portion</sub></span>
+              </p>
+            </div>
+            <div class="order me-4">
+              <i class="fa-solid fa-cart-plus"></i>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

@@ -8,6 +8,16 @@ import Menu from "../views/website/Menu.vue";
 import Cart from "../views/website/Cart.vue";
 import Bills from "../views/website/Bills.vue";
 import Settings from "../views/website/Settings.vue";
+/*
+  Dashboard Pages
+*/
+import AdminLogin from "../views/dashboard/AdminLogin.vue";
+import HomeDash from "../views/dashboard/Home.vue";
+import AddCategory from "../views/dashboard/categories/AddCategory.vue";
+import AllCategory from "../views/dashboard/categories/AllCategories.vue";
+import AddDish from "../views/dashboard/dishes/AddDish.vue";
+import AllDishes from "../views/dashboard/dishes/AllDishes.vue";
+
 const routes = [
   {
     path: "/",
@@ -74,6 +84,57 @@ const routes = [
     component: Settings,
     meta: {
       title: "Settings page",
+    },
+  },
+  /*
+    -->> Dashboard Routes
+  */
+  {
+    path: "/dashboard/login",
+    name: "AdminLogin",
+    component: AdminLogin,
+    meta: {
+      title: "Dashboard Login",
+    },
+  },
+  {
+    path: "/dashboard/home",
+    name: "HomeDash",
+    component: HomeDash,
+    meta: {
+      title: "Dashboard Home",
+    },
+  },
+  {
+    path: "/dashboard/categories",
+    name: "AllCategories",
+    component: AllCategory,
+    meta: {
+      title: "Categories",
+    },
+  },
+  {
+    path: "/dashboard/categories/add-category",
+    name: "AddCategory",
+    component: AddCategory,
+    meta: {
+      title: "Add Category",
+    },
+  },
+  {
+    path: "/dashboard/dishes",
+    name: "AllDishes",
+    component: AllDishes,
+    meta: {
+      title: "Dishes",
+    },
+  },
+  {
+    path: "/dashboard/dishes/add-dish",
+    name: "AddDish",
+    component: AddDish,
+    meta: {
+      title: "Add dish",
     },
   },
   /*
