@@ -5,7 +5,7 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-brands fa-wpforms me-2"></i>Add Category
+          <i class="fa-brands fa-wpforms me-2"></i>Edit Category {{ id }}
         </h2>
         <div class="ground">
           <form @submit.prevent="addCat">
@@ -56,6 +56,9 @@ import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 export default {
   components: { SideBar, Header },
+  props: {
+    id: String,
+  },
   setup() {
     const state = reactive({
       category: "",

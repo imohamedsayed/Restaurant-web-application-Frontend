@@ -13,45 +13,7 @@
               <i class="fa-solid fa-plus fa-beat me-2"></i> Add new category
             </button>
           </div>
-          <table>
-            <input
-              type="search"
-              class="search my-5"
-              placeholder="search for category"
-            />
-
-            <thead>
-              <th>ID</th>
-              <th>Picture</th>
-              <th>Category</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>#5241</td>
-                <td>
-                  <img
-                    src="../../../assets/category/burger.svg"
-                    class="img-fluid"
-                    alt=""
-                    width="80px"
-                  />
-                </td>
-                <td>Burgers</td>
-              </tr>
-              <tr>
-                <td>#5241</td>
-                <td>
-                  <img
-                    src="../../../assets/category/burger.svg"
-                    class="img-fluid"
-                    alt=""
-                    width="80px"
-                  />
-                </td>
-                <td>Burgers</td>
-              </tr>
-            </tbody>
-          </table>
+          <CategoriesList />
         </div>
       </div>
     </main>
@@ -61,8 +23,9 @@
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
+import CategoriesList from "@/components/dashboard/category/CategoriesList.vue";
 export default {
-  components: { SideBar, Header },
+  components: { SideBar, Header, CategoriesList },
 };
 </script>
 <style lang="scss" scoped>
@@ -114,47 +77,6 @@ export default {
             opacity: 1;
 
             font-size: 1.2rem;
-          }
-        }
-      }
-      input {
-        width: 50%;
-        height: 40px;
-        padding-left: 20px;
-        margin-bottom: 10px;
-        border: none;
-        outline: none;
-        border: 1px solid var(--light-orange);
-        border-radius: 10px;
-        transition: all 0.3s ease;
-        position: relative;
-        &:focus {
-          font-size: 1.2rem;
-        }
-      }
-      table {
-        width: 100%;
-        thead {
-          background: var(--dark-orange);
-          font-size: 1.2rem;
-          color: white;
-          th {
-            padding: 5px 10px;
-          }
-        }
-        tr {
-          background: #fff;
-          td {
-            padding: 5px 10px;
-            font-size: 1.2rem;
-            font-weight: 600;
-          }
-          &:nth-child(even) {
-            background: #eba47040;
-          }
-          transition: all 0.3s ease;
-          &:hover {
-            background: #eba47040;
           }
         }
       }

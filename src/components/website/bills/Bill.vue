@@ -55,10 +55,13 @@ table {
   text-align: center;
 
   thead {
-    background: var(--dark-orange);
+    background: var(--dark-orange) !important;
     color: white;
     font-size: 1.2rem;
     margin-bottom: 10x;
+    tr {
+      background: var(--dark-orange) !important;
+    }
     th {
       padding: 5px;
     }

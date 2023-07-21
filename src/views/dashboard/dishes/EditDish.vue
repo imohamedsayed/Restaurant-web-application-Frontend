@@ -5,20 +5,37 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-brands fa-wpforms me-2"></i>Add Category
+          <i class="fa-brands fa-wpforms me-2"></i>Edit Dish {{ id }}
         </h2>
         <div class="ground">
-          <form @submit.prevent="addCat">
+          <form @submit.prevent="addDish">
             <div class="row">
               <div class="col-md-6 col-12 mb-4">
-                <label>Category name</label>
-                <input type="text" v-model="state.category" />
+                <label>Dish name</label>
+                <input type="text" v-model="state.product" />
+                <span class="text-danger fw-bold" v-if="v$.product.$error">
+                  {{ v$.product.$errors[0].$message }}
+                </span>
+              </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label>Dish Price</label>
+                <input type="text" v-model="state.price" />
+                <span class="text-danger fw-bold" v-if="v$.price.$error">
+                  {{ v$.price.$errors[0].$message }}
+                </span>
+              </div>
+              <div class="col-md-6 col-12 mb-4">
+                <label>Category</label>
+                <select v-model="state.category">
+                  <option value="10">Fish</option>
+                  <option value="5">Burger</option>
+                </select>
                 <span class="text-danger fw-bold" v-if="v$.category.$error">
                   {{ v$.category.$errors[0].$message }}
                 </span>
               </div>
               <div class="col-md-6 col-12 mb-4">
-                <label>Category Image</label>
+                <label>Dish Image</label>
                 <label class="for-image label" for="img"
                   ><i class="fa-solid fa-cloud-arrow-up"></i>
                   <span>Upload Img</span></label
@@ -53,32 +70,39 @@ import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
 import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { required } from "@vuelidate/validators";
+import { required, numeric } from "@vuelidate/validators";
 export default {
   components: { SideBar, Header },
+  props: {
+    id: String,
+  },
   setup() {
     const state = reactive({
-      category: "",
+      product: "",
       img: "",
+      price: "",
+      category: "",
     });
 
     const rules = computed(() => {
       return {
+        product: { required },
         category: { required },
         img: { required },
+        price: { required, numeric },
       };
     });
 
     const v$ = useVuelidate(rules, state);
 
-    const addCat = async () => {
+    const addDish = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
       } else {
       }
     };
 
-    return { state, v$, addCat };
+    return { state, v$, addDish };
   },
 };
 </script>
@@ -112,10 +136,20 @@ export default {
       box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
       background: var(--bg-black-100);
       form {
-        input {
+        input,
+        select {
           width: 100%;
         }
-
+        select {
+          height: 40px;
+          border-radius: 10px;
+          border: 1px solid var(--dark-orange);
+          transition: all 0.3s ease;
+          &:focus {
+            outline: none;
+            font-size: 1.2rem;
+          }
+        }
         label {
           display: block;
           margin-bottom: 15px;

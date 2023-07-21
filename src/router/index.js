@@ -14,10 +14,14 @@ import Settings from "../views/website/Settings.vue";
 import AdminLogin from "../views/dashboard/AdminLogin.vue";
 import HomeDash from "../views/dashboard/Home.vue";
 import AddCategory from "../views/dashboard/categories/AddCategory.vue";
+import EditCategory from "../views/dashboard/categories/EditCategory.vue";
 import AllCategory from "../views/dashboard/categories/AllCategories.vue";
 import AddDish from "../views/dashboard/dishes/AddDish.vue";
+import EditDish from "../views/dashboard/dishes/EditDish.vue";
 import AllDishes from "../views/dashboard/dishes/AllDishes.vue";
-
+import Orders from "../views/dashboard/orders/Orders.vue";
+import Users from "../views/dashboard/users/Users.vue";
+import Bill from "../views/dashboard/orders/Bill.vue";
 const routes = [
   {
     path: "/",
@@ -98,7 +102,7 @@ const routes = [
     },
   },
   {
-    path: "/dashboard/home",
+    path: "/dashboard/",
     name: "HomeDash",
     component: HomeDash,
     meta: {
@@ -122,6 +126,15 @@ const routes = [
     },
   },
   {
+    path: "/dashboard/categories/:id/edit",
+    name: "EditCategory",
+    component: EditCategory,
+    props: true,
+    meta: {
+      title: "Edit Category",
+    },
+  },
+  {
     path: "/dashboard/dishes",
     name: "AllDishes",
     component: AllDishes,
@@ -135,6 +148,40 @@ const routes = [
     component: AddDish,
     meta: {
       title: "Add dish",
+    },
+  },
+  {
+    path: "/dashboard/dishes/:id/edit",
+    name: "EditDish",
+    component: EditDish,
+    props: true,
+    meta: {
+      title: "Add dish",
+    },
+  },
+  {
+    path: "/dashboard/orders",
+    name: "Orders",
+    component: Orders,
+    meta: {
+      title: "Orders | Dashboard",
+    },
+  },
+  {
+    path: "/dashboard/orders/bill/:id",
+    name: "Bill",
+    props: true,
+    component: Bill,
+    meta: {
+      title: "Bill | Dashboard",
+    },
+  },
+  {
+    path: "/dashboard/users",
+    name: "Users",
+    component: Users,
+    meta: {
+      title: "Users | Dashboard",
     },
   },
   /*

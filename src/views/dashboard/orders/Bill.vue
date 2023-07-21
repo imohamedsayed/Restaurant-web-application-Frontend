@@ -5,15 +5,30 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-solid fa-clipboard-list me-2 fa-bounce"></i>Dishes
+          <i class="fa-solid fa-file-invoice-dollar me-3 fa-bounce"></i>Bill
+          #778745
         </h2>
         <div class="ground">
-          <div class="up-area">
-            <button>
-              <i class="fa-solid fa-plus fa-beat me-2"></i> Add new category
-            </button>
+          <div class="up-area" style="letter-spacing: 5px">
+            <h4>Origin : 350$</h4>
+            <h4>Taxes : 14$</h4>
+            <h4>Service : 25$</h4>
+            <h2 class="mt-2 p-2">Total : 390$</h2>
+            <hr />
           </div>
-          <DishesList />
+          <table>
+            <thead>
+              <th>Dish ID</th>
+              <th>Item</th>
+              <th class="d-none d-lg-table-cell">item's image</th>
+              <th class="d-none d-md-table-cell">Price per unit</th>
+              <th>Quantity</th>
+              <th>total</th>
+            </thead>
+            <tbody>
+              <Bill />
+            </tbody>
+          </table>
         </div>
       </div>
     </main>
@@ -23,9 +38,9 @@
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
-import DishesList from "@/components/dashboard/dishes/DishesList.vue";
+import Bill from "../../../components/dashboard/orders/Bill.vue";
 export default {
-  components: { SideBar, Header, DishesList },
+  components: { SideBar, Header, Bill },
 };
 </script>
 <style lang="scss" scoped>

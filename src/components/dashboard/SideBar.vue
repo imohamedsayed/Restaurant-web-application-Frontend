@@ -65,7 +65,7 @@
         </li>
         <div class="collapse" id="second-dishes">
           <ul class="list-unstyled">
-            <router-link :to="{ name: 'Menu' }">
+            <router-link :to="{ name: 'AddDish' }">
               <li
                 class="d-flex justify-content-between align-items-center second-li px-4"
               >
@@ -75,7 +75,7 @@
                 </div>
               </li>
             </router-link>
-            <router-link :to="{ name: 'HomeDash' }">
+            <router-link :to="{ name: 'AllDishes' }">
               <li
                 class="d-flex justify-content-between align-items-center second-li px-4"
               >
@@ -88,7 +88,7 @@
           </ul>
         </div>
       </div>
-      <router-link :to="{ name: 'Menu' }">
+      <router-link :to="{ name: 'Orders' }">
         <li class="d-flex justify-content-between align-items-center">
           <div class="section-name">
             <i class="fa-solid fa-truck-ramp-box"></i>
@@ -96,7 +96,7 @@
           </div>
         </li>
       </router-link>
-      <router-link :to="{ name: 'Menu' }">
+      <router-link :to="{ name: 'Users' }">
         <li class="d-flex justify-content-between align-items-center">
           <div class="section-name">
             <i class="fa-solid fa-users"></i>

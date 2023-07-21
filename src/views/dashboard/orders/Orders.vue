@@ -5,15 +5,11 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-solid fa-clipboard-list me-2 fa-bounce"></i>Dishes
+          <i class="fa-solid fa-truck-fast me-2 fa-shake"></i>Orders
         </h2>
         <div class="ground">
-          <div class="up-area">
-            <button>
-              <i class="fa-solid fa-plus fa-beat me-2"></i> Add new category
-            </button>
-          </div>
-          <DishesList />
+          <div class="up-area"></div>
+          <OrdersList />
         </div>
       </div>
     </main>
@@ -23,9 +19,9 @@
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
-import DishesList from "@/components/dashboard/dishes/DishesList.vue";
+import OrdersList from "../../../components/dashboard/orders/OrdersList.vue";
 export default {
-  components: { SideBar, Header, DishesList },
+  components: { SideBar, Header, OrdersList },
 };
 </script>
 <style lang="scss" scoped>
