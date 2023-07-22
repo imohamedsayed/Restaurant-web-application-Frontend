@@ -10,8 +10,12 @@
             delivery
           </p>
           <div class="actions">
-            <button class="btn order-now">Order Now</button>
-            <button class="btn see-menu">See Menu</button>
+            <button class="btn order-now" @click="$router.push('/home')">
+              Order Now
+            </button>
+            <button class="btn see-menu" @click="$router.push('/home')">
+              See Menu
+            </button>
           </div>
         </div>
         <img src="../assets/burger.png" alt="" class="back-photo" />

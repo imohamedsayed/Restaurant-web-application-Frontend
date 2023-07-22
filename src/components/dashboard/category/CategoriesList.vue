@@ -11,10 +11,19 @@
         <th>Picture</th>
         <th>Category</th>
       </thead>
-      <tbody>
-        <Category />
-        <Category />
-        <Category />
+      <tbody v-if="categories.length">
+        <Category
+          v-for="category in categories"
+          :key="category._id"
+          :category="category"
+        />
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="3">
+            <p class="alert alert-warning">You have no categories yet</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -24,6 +33,7 @@
 import Category from "./Category.vue";
 export default {
   components: { Category },
+  props: ["categories"],
 };
 </script>
 

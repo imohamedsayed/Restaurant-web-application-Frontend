@@ -46,20 +46,43 @@
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
-import { reactive, computed } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { reactive, computed, onMounted } from "vue";
+import axios from "axios";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+
+import { toast } from "vue3-toastify";
+
 export default {
-  components: { SideBar, Header },
+  components: { SideBar, Header, SpinnerLoading },
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const state = reactive({
       category: "",
       img: "",
+      loading: false,
+
+      user: computed(() => store.state.user),
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
     });
 
     const rules = computed(() => {
@@ -74,7 +97,40 @@ export default {
     const addCat = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        state.loading = true;
+        const data = {
+          name: state.category,
+          image: state.img,
+        };
+        try {
+          // start making post request
+
+          const res = await axios.post("/api-dashboard/category/", data, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (res.status == 201) {
+            toast.success("Category Added Successfully", {
+              autoClose: 1500,
+            });
+          } else {
+            toast.error("Something went wrong try again", {
+              autoClose: 1500,
+            });
+          }
+        } catch (err) {
+          toast.error("Something went wrong try again later", {
+            autoClose: 1500,
+          });
+        }
+
+        state.loading = false;
       } else {
+        toast.error("Invalid Data", {
+          autoClose: 1500,
+        });
       }
     };
 

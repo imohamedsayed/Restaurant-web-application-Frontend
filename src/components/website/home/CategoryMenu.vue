@@ -69,7 +69,7 @@
           </div>
         </div>
       </div>
-       <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-lg-3 col-md-6 col-12">
         <div class="menu-item">
           <div class="img">
             <img
@@ -95,7 +95,7 @@
           </div>
         </div>
       </div>
-       <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-lg-3 col-md-6 col-12">
         <div class="menu-item">
           <div class="img">
             <img
@@ -121,7 +121,7 @@
           </div>
         </div>
       </div>
-       <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-lg-3 col-md-6 col-12">
         <div class="menu-item">
           <div class="img">
             <img
@@ -164,6 +164,9 @@ export default {};
     margin-bottom: 20px;
     &:hover {
       box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+    }
+    img {
+      width: 100%;
     }
     .details {
       padding: 10px;

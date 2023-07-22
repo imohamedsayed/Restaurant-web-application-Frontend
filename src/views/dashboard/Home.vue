@@ -41,6 +41,7 @@
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
@@ -48,8 +49,33 @@ import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
 import Statisfaction from "@/components/dashboard/home/Statisfaction.vue";
 import Calender from "@/components/dashboard/home/Calender.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { reactive, computed, onMounted } from "vue";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import axios from "axios";
 export default {
-  components: { SideBar, Header, Statisfaction, Calender },
+  components: { SideBar, Header, Statisfaction, Calender, SpinnerLoading },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const state = reactive({
+      loading: false,
+      user: computed(() => store.state.user),
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+    });
+
+    return { state };
+  },
 };
 </script>
 

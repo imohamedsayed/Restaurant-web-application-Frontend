@@ -9,23 +9,70 @@
         </h2>
         <div class="ground">
           <div class="up-area">
-            <button>
+            <button @click="$router.push('/dashboard/categories/add-category')">
               <i class="fa-solid fa-plus fa-beat me-2"></i> Add new category
             </button>
           </div>
-          <CategoriesList />
+          <div>
+            <CategoriesList :categories="state.categories" />
+          </div>
         </div>
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
 import CategoriesList from "@/components/dashboard/category/CategoriesList.vue";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { reactive, computed, onMounted } from "vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
+
 export default {
-  components: { SideBar, Header, CategoriesList },
+  components: { SideBar, Header, CategoriesList, SpinnerLoading },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const state = reactive({
+      loading: false,
+      user: computed(() => store.state.user),
+      categories: [],
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+
+      // Start Getting categories
+      state.loading = true;
+
+      try {
+        const res = await axios.get("/api-dashboard/category");
+
+        if (res.status == 200) {
+          state.categories = res.data.categories;
+        }
+      } catch (err) {
+        toast.error("something went wrong, try again later", {
+          autoClose: 1500,
+        });
+      }
+
+      state.loading = false;
+    });
+    return { state };
+  },
 };
 </script>
 <style lang="scss" scoped>

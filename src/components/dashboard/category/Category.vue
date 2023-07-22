@@ -3,17 +3,26 @@
     <td class="check" @click="opened = !opened">
       <i v-if="opened" class="fa fa-circle-plus plus me-2"></i>
       <i v-else class="fa-solid fa-circle-minus minus me-2"></i>
-      #5241
+      #{{ category._id.substring(-1, 5) }}...
     </td>
     <td>
-      <img src="../../../assets/category/burger.svg" class="img-fluid" alt="" />
+      <img
+        :src="'http://localhost:8000/' + category.image"
+        class="img-fluid"
+        alt=""
+      />
     </td>
-    <td class="open">Burgers</td>
+    <td class="open">{{ category.name }}</td>
   </tr>
   <tr class="close naming" v-if="!opened">
     <td colspan="9">
       <ul>
-        <li>category: <span>Burgers</span></li>
+        <li>
+          category: <span>{{ category.name }}</span>
+        </li>
+        <li>
+          Id: <span>{{ category._id }}</span>
+        </li>
       </ul>
     </td>
   </tr>
@@ -35,6 +44,7 @@
 </template>
 
 <script>
+import { onMounted } from "vue";
 export default {
   data() {
     return {
@@ -44,6 +54,8 @@ export default {
       id: 0,
     };
   },
+  props: ["category"],
+  setup(props) {},
 };
 </script>
 

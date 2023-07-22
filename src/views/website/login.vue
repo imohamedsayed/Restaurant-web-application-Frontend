@@ -51,20 +51,37 @@
       </div>
     </div>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import LandingHeader from "@/components/LandingHeader.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength } from "@vuelidate/validators";
-import { reactive, computed } from "vue";
+import axios from "axios";
+import { reactive, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import { toast } from "vue3-toastify";
 export default {
-  components: { LandingHeader },
+  components: { LandingHeader, SpinnerLoading },
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const state = reactive({
+      customer: computed(() => store.state.user),
       email: "",
       password: "",
+      loading: false,
     });
+
+    onMounted(() => {
+      if (state.customer) {
+        router.push("/home");
+      }
+    });
+
     const rules = computed(() => {
       return {
         email: { required, email },
@@ -73,10 +90,33 @@ export default {
     });
     const v$ = useVuelidate(rules, state);
 
-    const login = () => {
+    const login = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        state.loading = true;
+        try {
+          let data = {
+            email: state.email,
+            password: state.password,
+          };
+          await store.dispatch("customerLogin", data);
+
+          toast.success("Login Successfully", {
+            autoClose: 1000,
+          });
+
+          router.push("/home");
+        } catch (err) {
+          toast.error(err, {
+            autoClose: 1000,
+          });
+        }
+
+        state.loading = true;
       } else {
+        toast.error("Missing Data", {
+          autoClose: 1000,
+        });
       }
     };
 

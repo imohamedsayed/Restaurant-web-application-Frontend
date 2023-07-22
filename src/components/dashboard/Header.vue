@@ -1,12 +1,14 @@
 <template>
   <header class="d-flex mb-5">
-    <div class="public d-flex align-items-center">
+    <div class="public d-flex align-items-center" v-if="state.user">
       <div class="img me-2">
         <img src="../../assets/user.jpg" alt="" />
       </div>
       <div class="info pe-2">
-        <p class="m-0 fw-bold">Mohamed ElSayed</p>
-        <span class="text-muted me-3">Admin</span>
+        <p class="m-0 fw-bold">{{ state.user.name }}</p>
+        <span class="text-muted me-3">{{
+          state.user.role == 0 ? "Customer" : "Admin"
+        }}</span>
         <span class="dropdown">
           <i
             class="fa-solid fa-chevron-down options"
@@ -24,7 +26,7 @@
                 <i class="fa-solid fa-user me-2"></i> Profile</router-link
               >
             </li>
-            <li>
+            <li @click="logout">
               <a class="dropdown-item text-danger fw-bold" href="#">
                 <i class="fa-solid fa-door-open fa-bounce me-2"></i>Logout</a
               >
@@ -37,7 +39,24 @@
 </template>
 
 <script>
-export default {};
+import { computed, reactive } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+export default {
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const state = reactive({
+      user: computed(() => store.state.user),
+    });
+
+    const logout = () => {
+      store.dispatch("Logout");
+      router.push("/");
+    };
+    return { state, logout };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -75,21 +75,36 @@
       </div>
     </div>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import LandingHeader from "@/components/LandingHeader.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, sameAs } from "@vuelidate/validators";
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
+import { toast } from "vue3-toastify";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+
 export default {
-  components: { LandingHeader },
+  components: { LandingHeader, SpinnerLoading },
   setup() {
+    const store = useStore();
+    const router = useRouter();
+
+    onMounted(() => {
+      if (state.customer) {
+        router.push("/home");
+      }
+    });
     const state = reactive({
       name: "",
       email: "",
       password: "",
       passwordConfirm: "",
+      loading: false,
     });
     const rules = computed(() => {
       return {
@@ -101,10 +116,33 @@ export default {
     });
     const v$ = useVuelidate(rules, state);
 
-    const signup = () => {
+    const signup = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        state.loading = true;
+
+        const data = {
+          name: state.name,
+          email: state.email,
+          password: state.password,
+        };
+
+        try {
+          await store.dispatch("customerSignup", data);
+          toast.success("Account Created Successfully", {
+            autoClose: 1000,
+          });
+        } catch (err) {
+          toast.error(err, {
+            autoClose: 1000,
+          });
+        }
+        state.loading = false;
+        router.push("/home");
       } else {
+        toast.error("Invalid Data", {
+          autoClose: 1000,
+        });
       }
     };
 
