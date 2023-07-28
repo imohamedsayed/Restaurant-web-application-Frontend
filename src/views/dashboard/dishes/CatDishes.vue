@@ -41,7 +41,8 @@ import axios from "axios";
 
 export default {
   components: { SideBar, Header, DishesList, SpinnerLoading },
-  setup() {
+  props: ["id"],
+  setup(props) {
     const store = useStore();
     const router = useRouter();
     const state = reactive({
@@ -49,6 +50,7 @@ export default {
       dishes: [],
       display: [],
       searchItem: "",
+
       user: computed(() => store.state.user),
     });
 
@@ -64,9 +66,11 @@ export default {
       state.loading = true;
 
       try {
-        const res = await axios.get("/api-dashboard/dishes/");
+        const res = await axios.get(
+          "/api-dashboard/dishes/category/" + props.id
+        );
 
-        state.dishes = res.data;
+        state.dishes = res.data.dishes;
         state.display = state.dishes;
       } catch (err) {
         toast.error("something went wrong while getting dishes");
@@ -79,7 +83,6 @@ export default {
         dish.name.toLowerCase().includes(key.toLowerCase())
       );
     };
-
     return { state, search };
   },
 };

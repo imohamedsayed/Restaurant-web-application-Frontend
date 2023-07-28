@@ -14,7 +14,14 @@
             </button>
           </div>
           <div>
-            <CategoriesList :categories="state.categories" />
+            <input
+              type="search"
+              class="search my-5"
+              placeholder="search for category"
+              v-model="state.searchItem"
+              @keyup="search(state.searchItem)"
+            />
+            <CategoriesList :categories="state.display" />
           </div>
         </div>
       </div>
@@ -43,6 +50,8 @@ export default {
       loading: false,
       user: computed(() => store.state.user),
       categories: [],
+      display: [],
+      searchItem: "",
     });
 
     onMounted(async () => {
@@ -62,6 +71,7 @@ export default {
 
         if (res.status == 200) {
           state.categories = res.data.categories;
+          state.display = state.categories;
         }
       } catch (err) {
         toast.error("something went wrong, try again later", {
@@ -71,7 +81,14 @@ export default {
 
       state.loading = false;
     });
-    return { state };
+
+    const search = (key) => {
+      state.display = state.categories.filter((cat) =>
+        cat.name.toLowerCase().includes(key.toLowerCase())
+      );
+    };
+
+    return { state, search };
   },
 };
 </script>

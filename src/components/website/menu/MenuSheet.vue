@@ -1,24 +1,10 @@
 <template>
-  <div class="col-lg-4 col-md-6 col-12">
+  <div class="col-lg-4 col-md-6 col-12" v-if="state.dishes.length">
     <div class="menu-sheet mb-5">
-      <h4 class="menu-header text-center">Pizza</h4>
+      <h4 class="menu-header text-center">{{ category.name }}</h4>
       <div class="menu-items mt-5">
         <ul class="list-unstyled p-0">
-          <li class="d-flex justify-content-between align-items-center mb-3">
-            <span class="item-name"> Pizza checkin ranch </span>
-            <span class="price">20$</span>
-
-            <span class="item-options">
-              <i class="fa-solid fa-cart-plus"></i>
-            </span>
-          </li>
-          <li class="d-flex justify-content-between align-items-center mb-3">
-            <span class="item-name"> Pizza Mix Sea Food </span>
-            <span class="price">20$</span>
-            <span class="item-options">
-              <i class="fa-solid fa-cart-plus"></i>
-            </span>
-          </li>
+          <Item v-for="dish in state.dishes" :key="dish._id" :dish="dish" />
         </ul>
       </div>
     </div>
@@ -26,7 +12,37 @@
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+import { onMounted, reactive } from "vue";
+import { toast } from "vue3-toastify";
+import Item from "./Item.vue";
+export default {
+  components: { Item },
+  props: ["category"],
+  setup(props) {
+    const state = reactive({
+      dishes: [],
+    });
+
+    onMounted(async () => {
+      try {
+        const res = await axios.get(
+          "/api/dishes/category/" + props.category._id
+        );
+
+        state.dishes = res.data.dishes;
+      } catch (err) {
+        toast.error(
+          "Something went wrong while getting " +
+            props.category.name +
+            " dishes"
+        );
+      }
+    });
+
+    return { state };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -46,31 +62,6 @@ export default {};
     border-radius: 25px;
     left: 50%;
     transform: translateX(-50%);
-  }
-  .menu-items {
-    li {
-      background: #99999922;
-      padding: 10px;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-      &:hover {
-        background: #9999995a;
-      }
-      .price {
-        color: green;
-        font-weight: 600;
-      }
-      .item-options {
-        color: var(--light-orange);
-        i {
-          cursor: pointer;
-          transition: all 0.3s ease;
-          &:hover {
-            transform: scale(1.5);
-          }
-        }
-      }
-    }
   }
 }
 </style>

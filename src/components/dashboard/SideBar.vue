@@ -106,14 +106,14 @@
       </router-link>
       <hr class="bg-light text-light" />
       <div class="flex"></div>
-      <router-link :to="{ name: 'Menu' }">
+      <a @click="logout">
         <li class="d-flex justify-content-between align-items-center">
           <div class="section-name">
             <i class="fa-solid fa-right-from-bracket fa-rotate-180"></i>
             <span class="text-danger">Logout</span>
           </div>
         </li>
-      </router-link>
+      </a>
     </ul>
   </aside>
   <div class="asideToggler" @click="openAside">
@@ -126,6 +126,10 @@ export default {
   methods: {
     openAside() {
       this.$refs.aside.classList.toggle("open");
+    },
+    logout() {
+      this.$store.dispatch("Logout");
+      this.$router.push("/dashboard/login");
     },
   },
 };

@@ -1,46 +1,36 @@
 <template>
   <div class="col-lg-2 col-md-3 col-6 mb-4">
     <div
-      class="cat-box text-center nav-link active"
-      id="checkin-tab"
+      class="cat-box text-center nav-link item-box"
+      :id="category._id + '-tab'"
       data-bs-toggle="tab"
-      data-bs-target="#checkin"
+      :data-bs-target="'#' + category._id"
       type="button"
       role="tab"
-      aria-controls="checkin"
+      :aria-controls="category._id"
       aria-selected="true"
     >
-      <img src="../../../assets/category/check.svg" width="80px" alt="" />
-      <p class="cat-name mt-3 fw-bold">Chicken</p>
-    </div>
-  </div>
-  <div class="col-lg-2 col-md-3 col-6 mb-4">
-    <div
-      class="cat-box text-center nav-link"
-      id="sushi-tab"
-      data-bs-toggle="tab"
-      data-bs-target="#sushi"
-      type="button"
-      role="tab"
-      aria-controls="sushi"
-      aria-selected="true"
-    >
-      <img src="../../../assets/category/sushi.svg" width="80px" alt="" />
-
-      <p class="cat-name mt-3 fw-bold">Sushi</p>
-    </div>
-  </div>
-
-  <div class="col-lg-2 col-md-3 col-6 mb-4">
-    <div class="cat-box text-center">
-      <img src="../../../assets/category/burger.svg" width="80px" alt="" />
-      <p class="cat-name mt-3 fw-bold">Burger</p>
+      <img
+        :src="'http://localhost:8000/' + category.image"
+        width="80px"
+        alt=""
+      />
+      <p class="cat-name mt-3 fw-bold">{{ category.name }}</p>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { onMounted } from "vue";
+
+export default {
+  props: ["category"],
+  setup() {
+    onMounted(() => {
+      document.querySelectorAll(".cat-box")[0].classList.add("active");
+    });
+  },
+};
 </script>
 
 <style lang="scss" scoped>

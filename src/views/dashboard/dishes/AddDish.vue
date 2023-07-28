@@ -26,10 +26,16 @@
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>Category</label>
-                <select v-model="state.category">
-                  <option value="10">Fish</option>
-                  <option value="5">Burger</option>
+                <select v-model="state.category" v-if="state.categories.length">
+                  <option
+                    :value="cat._id"
+                    v-for="cat in state.categories"
+                    :key="cat._id"
+                  >
+                    {{ cat.name }}
+                  </option>
                 </select>
+                <p class="alert alert-danger" v-else>You have no categories</p>
                 <span class="text-danger fw-bold" v-if="v$.category.$error">
                   {{ v$.category.$errors[0].$message }}
                 </span>
@@ -63,22 +69,61 @@
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import axios from "axios";
+
+import { toast } from "vue3-toastify";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
 export default {
-  components: { SideBar, Header },
+  components: { SideBar, Header, SpinnerLoading },
   setup() {
+    const store = useStore();
+    const router = useRouter();
     const state = reactive({
       product: "",
       img: "",
       price: "",
       category: "",
+      loading: false,
+      categories: [],
+      user: computed(() => store.state.user),
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+
+      state.loading = true;
+
+      try {
+        const res = await axios.get("/api-dashboard/category/");
+        if (res.status == 200) {
+          state.categories = res.data.categories;
+        } else {
+          toast.error(
+            "Something went wrong while getting categories, try again later"
+          );
+        }
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
+
+      state.loading = false;
     });
 
     const rules = computed(() => {
@@ -95,7 +140,42 @@ export default {
     const addDish = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        state.loading = true;
+        const data = {
+          name: state.product,
+          category: state.category,
+          image: state.img,
+          price: state.price,
+        };
+
+        try {
+          const res = await axios.post("/api-dashboard/dishes/", data, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+
+          if (res.status == 201) {
+            toast.success("Dish added successfully");
+          } else {
+            const err = res.response.data.errors;
+            if (err) {
+              for (var prop in err) {
+                if (err[prop]) {
+                  toast.error(err[prop]);
+                }
+              }
+            } else {
+              toast.error("Something went wrong, please try again later");
+            }
+          }
+        } catch (err) {
+          toast.error("Something went wrong, please try again later");
+        }
+
+        state.loading = false;
       } else {
+        toast.error("Invalid or missing data");
       }
     };
 

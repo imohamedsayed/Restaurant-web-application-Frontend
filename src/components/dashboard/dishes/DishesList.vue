@@ -1,10 +1,5 @@
 <template>
   <div class="cat-list">
-    <input
-      type="search"
-      class="search my-5"
-      placeholder="search for dish"
-    />
     <table>
       <thead>
         <th>ID</th>
@@ -12,8 +7,15 @@
         <th>Dish</th>
         <th>price</th>
       </thead>
-      <tbody>
-        <Dish />
+      <tbody v-if="dishes.length">
+        <Dish v-for="dish in dishes" :key="dish._id" :dish="dish" />
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="4">
+            <p class="alert alert-info">You have no dishes</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -21,7 +23,9 @@
 
 <script>
 import Dish from "./Dish.vue";
+
 export default {
+  props: ["dishes"],
   components: { Dish },
 };
 </script>

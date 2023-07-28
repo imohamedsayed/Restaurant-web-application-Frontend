@@ -1,10 +1,6 @@
 <template>
   <div class="cat-list">
-    <input
-      type="search"
-      class="search my-5"
-      placeholder="search for order by customer"
-    />
+   
     <table>
       <thead>
         <th>ID</th>

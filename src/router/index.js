@@ -22,6 +22,7 @@ import AllDishes from "../views/dashboard/dishes/AllDishes.vue";
 import Orders from "../views/dashboard/orders/Orders.vue";
 import Users from "../views/dashboard/users/Users.vue";
 import Bill from "../views/dashboard/orders/Bill.vue";
+import CatDishes from "../views/dashboard/dishes/CatDishes.vue";
 const routes = [
   {
     path: "/",
@@ -132,6 +133,15 @@ const routes = [
     props: true,
     meta: {
       title: "Edit Category",
+    },
+  },
+  {
+    path: "/dashboard/categories/:id/dishes",
+    name: "CatDishes",
+    component: CatDishes,
+    props: true,
+    meta: {
+      title: "Category's dishes",
     },
   },
   {

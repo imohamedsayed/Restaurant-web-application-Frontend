@@ -1,10 +1,5 @@
 <template>
   <div class="cat-list">
-    <input
-      type="search"
-      class="search my-5"
-      placeholder="search for a customer"
-    />
     <table>
       <thead>
         <th>ID</th>
@@ -12,8 +7,15 @@
         <th>Name</th>
         <th class="d-none d-md-table-cell">Email</th>
       </thead>
-      <tbody>
-        <User />
+      <tbody v-if="users.length">
+        <User v-for="user in users" :key="user._id" :user="user" />
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="4">
+            <p class="alert alert-info">You have no users</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -22,6 +24,7 @@
 <script>
 import User from "./User.vue";
 export default {
+  props: ["users"],
   components: { User },
 };
 </script>

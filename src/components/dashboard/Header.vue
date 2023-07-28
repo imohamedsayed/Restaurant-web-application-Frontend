@@ -2,7 +2,7 @@
   <header class="d-flex mb-5">
     <div class="public d-flex align-items-center" v-if="state.user">
       <div class="img me-2">
-        <img src="../../assets/user.jpg" alt="" />
+        <img :src="'http://localhost:8000/' + state.user.image" alt="" />
       </div>
       <div class="info pe-2">
         <p class="m-0 fw-bold">{{ state.user.name }}</p>
@@ -54,6 +54,7 @@ export default {
       store.dispatch("Logout");
       router.push("/");
     };
+
     return { state, logout };
   },
 };

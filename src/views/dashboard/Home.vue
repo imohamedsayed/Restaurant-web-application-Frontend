@@ -8,25 +8,26 @@
           <div class="col-lg-3 col-md-4 col-6 mb-4">
             <div class="stat-box">
               <i class="fa-solid fa-users fa-fade"></i>
-              360 User
+              {{ state.usersNo }} User
             </div>
           </div>
           <div class="col-lg-3 col-md-4 col-6 mb-4">
             <div class="stat-box">
               <i class="fa-solid fa-bowl-food fa-flip"></i>
-              4000 Dish
+              {{ state.DishNo }} Dish
             </div>
           </div>
 
           <div class="col-lg-3 col-md-4 col-6 mb-4">
             <div class="stat-box">
-              <i class="fa-solid fa-truck-fast fa-shake"></i> 2440 Order
+              <i class="fa-solid fa-truck-fast fa-shake"></i
+              >{{ state.orderNo }} Order
             </div>
           </div>
           <div class="col-lg-3 col-md-4 col-6 mb-4">
             <div class="stat-box">
               <i class="fa-solid fa-dollar-sign fa-bounce"></i>
-              3,500,200$ Revenue
+              {{ state.revenue }}$ Revenue
             </div>
           </div>
         </div>
@@ -54,6 +55,7 @@ import { useRouter } from "vue-router";
 import { reactive, computed, onMounted } from "vue";
 import SpinnerLoading from "@/components/SpinnerLoading.vue";
 import axios from "axios";
+import { toast } from "vue3-toastify";
 export default {
   components: { SideBar, Header, Statisfaction, Calender, SpinnerLoading },
   setup() {
@@ -62,6 +64,10 @@ export default {
     const state = reactive({
       loading: false,
       user: computed(() => store.state.user),
+      usersNo: 0,
+      DishNo: 0,
+      orderNo: 0,
+      revenue: 0,
     });
 
     onMounted(async () => {
@@ -72,6 +78,27 @@ export default {
           router.push("/");
         }
       }
+      state.loading = true;
+
+      try {
+        const users_res = await axios.get("/api-dashboard/users/stats");
+        state.usersNo = users_res.data.stats.number;
+      } catch (err) {
+        toast.warning(
+          "something went wrong when getting users stats, try again later"
+        );
+      }
+
+      try {
+        const dish_res = await axios.get("/api-dashboard/dishes/stats");
+        state.DishNo = dish_res.data.stats.number;
+      } catch (err) {
+        toast.warning(
+          "something went wrong when getting dishes stats, try again later"
+        );
+      }
+
+      state.loading = false;
     });
 
     return { state };

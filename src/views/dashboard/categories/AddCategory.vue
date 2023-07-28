@@ -58,10 +58,9 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { reactive, computed, onMounted } from "vue";
 import axios from "axios";
-import SpinnerLoading from "@/components/SpinnerLoading.vue";
 
 import { toast } from "vue3-toastify";
-
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
 export default {
   components: { SideBar, Header, SpinnerLoading },
   setup() {
@@ -71,7 +70,6 @@ export default {
       category: "",
       img: "",
       loading: false,
-
       user: computed(() => store.state.user),
     });
 

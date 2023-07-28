@@ -1,15 +1,25 @@
 <template>
   <div class="cart-item d-flex align-items-center gap-3 mb-4">
     <div class="img">
-      <img src="../../../assets/dishes/shrimp.jpg" class="img-fluid" alt="" />
+      <img
+        :src="'http://localhost:8000/' + product.image"
+        class="img-fluid"
+        alt=""
+      />
     </div>
     <div class="details">
-      <h4 class="fw-bold mb-3">Boiled Shrimp</h4>
+      <h4 class="fw-bold mb-3">{{ product.name }}</h4>
       <div class="price-qty d-flex align-items-center justify-content-between">
-        <p class="price fw-bold m-0">13.00$</p>
+        <p class="price fw-bold m-0">{{ product.price }}$</p>
         <div class="qty">
           <button class="btn minus">-</button>
-          <input type="number" min="1" style="width: 50px" class="mx-2" />
+          <input
+            type="number"
+            min="1"
+            style="width: 70px"
+            class="mx-2"
+            v-model="state.qty"
+          />
           <button class="btn add">+</button>
         </div>
       </div>
@@ -19,7 +29,21 @@
 </template>
 
 <script>
-export default {};
+import { computed, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+
+export default {
+  props: ["product"],
+  setup(props) {
+    const store = useStore();
+    const state = reactive({
+      cart: computed(() => store.state.cart),
+      qty: props.product.qty,
+    });
+
+    return { state };
+  },
+};
 </script>
 
 <style lang="scss" scoped>

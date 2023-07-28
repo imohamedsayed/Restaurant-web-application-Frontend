@@ -100,11 +100,9 @@ export default {
             password: state.password,
           };
           await store.dispatch("customerLogin", data);
-
           toast.success("Login Successfully", {
             autoClose: 1000,
           });
-
           router.push("/home");
         } catch (err) {
           toast.error(err, {
@@ -112,7 +110,7 @@ export default {
           });
         }
 
-        state.loading = true;
+        state.loading = false;
       } else {
         toast.error("Missing Data", {
           autoClose: 1000,

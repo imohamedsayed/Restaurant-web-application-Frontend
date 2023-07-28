@@ -4,22 +4,28 @@
     <main class="has-scrollbar">
       <Header />
       <div class="container">
-        <div class="row">
+        <div class="row" v-if="state.cart.length">
           <div class="col-md-6 col-12">
             <h3 class="fw-bold mb-3">Current Order</h3>
             <hr />
             <div class="products has-scrollbar pe-2">
-              <Product />
-              <Product />
-              <Product />
+              <Product
+                v-for="product in state.cart"
+                :key="product._id"
+                :product="product"
+              />
             </div>
             <hr />
             <div class="mt-5 money text-sm-center">
               <ul class="list-unstyled">
-                <li><p>Origin : 350$</p></li>
+                <li>
+                  <p>Origin : {{ total }}$</p>
+                </li>
                 <li><p>Taxes : 25$</p></li>
                 <li><p>Service : 50$</p></li>
-                <li><p class="total fw-bold">Total : 425$</p></li>
+                <li>
+                  <p class="total fw-bold">Total : {{ total + 75 }}$</p>
+                </li>
               </ul>
             </div>
           </div>
@@ -61,15 +67,27 @@
               </div>
 
               <div class="confirm-order mt-5 tab-content" id="myTabContent">
-                <OnlinePaymentForm />
-                <CashPaymentForm />
+                <OnlinePaymentForm @complete="palaceOrder" />
+                <CashPaymentForm @complete="palaceOrder" />
               </div>
             </div>
           </div>
         </div>
+        <div class="no-items text-center" v-else>
+          <img src="../../assets/cart.svg" class="img-fluid" alt="" />
+          <h1>
+            <i
+              class="fa-solid fa-shopping-cart fa-bounce me-1"
+              style="color: var(--dark-orange)"
+            ></i>
+            Your cart is empty
+          </h1>
+          <h5 class="text-muted fw-semibold">Add some meals to your cart</h5>
+        </div>
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
@@ -78,8 +96,62 @@ import Header from "@/components/website/Header.vue";
 import OnlinePaymentForm from "@/components/website/cart/OnlinePaymentForm.vue";
 import CashPaymentForm from "@/components/website/cart/CashPaymentForm.vue";
 import Product from "@/components/website/cart/Product.vue";
+import { computed, onMounted, reactive } from "vue";
+import { useStore } from "vuex";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import axios from "axios";
+import { toast } from "vue3-toastify";
+
 export default {
-  components: { SideBar, Header, OnlinePaymentForm, CashPaymentForm, Product },
+  components: {
+    SideBar,
+    Header,
+    OnlinePaymentForm,
+    CashPaymentForm,
+    Product,
+    SpinnerLoading,
+  },
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      cart: computed(() => store.state.cart),
+      user: computed(() => store.state.user),
+    });
+    const total = computed(() =>
+      state.cart.reduce((sum, { price, qty }) => sum + +price * qty, 0)
+    );
+    onMounted(async () => {});
+
+    const palaceOrder = async (userInfo) => {
+      state.loading = true;
+
+      const items = [];
+
+      state.cart.forEach((c) => items.push({ _id: c._id, qty: c.qty }));
+
+      const data = {
+        userId: state.user._id,
+        receiver: userInfo,
+        total: total._value + 75,
+        items,
+      };
+      try {
+        const res = await axios.post("/api/orders", data);
+
+        if (res.status == 201) {
+          store.dispatch("emptyCart");
+          toast.success("Order Submitted successfully");
+        } else {
+          toast.error("You have to login to complete your order");
+        }
+      } catch (err) {
+        toast.error("We cannot process your order now, try again later");
+      }
+      state.loading = false;
+    };
+
+    return { state, total, palaceOrder };
+  },
 };
 </script>
 
@@ -103,7 +175,7 @@ export default {
     .row {
       margin-top: 100px;
       .products {
-        height: 36vh;
+        max-height: 36vh;
         overflow: auto;
       }
       .money {
@@ -160,6 +232,15 @@ export default {
             }
           }
         }
+      }
+    }
+    .no-items {
+      img {
+        width: 600px;
+      }
+      font-weight: bold;
+      h5 {
+        font-weight: 600;
       }
     }
   }

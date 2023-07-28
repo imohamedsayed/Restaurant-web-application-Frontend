@@ -9,6 +9,11 @@
         </h2>
         <div class="ground">
           <div class="up-area"></div>
+          <input
+            type="search"
+            class="search my-5"
+            placeholder="search for an order "
+          />
           <OrdersList />
         </div>
       </div>

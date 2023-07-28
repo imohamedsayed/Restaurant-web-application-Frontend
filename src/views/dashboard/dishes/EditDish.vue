@@ -5,10 +5,11 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-brands fa-wpforms me-2"></i>Edit Dish {{ id }}
+          <i class="fa-brands fa-wpforms me-2"></i>Edit Dish
+          <span class="text-muted fs-3"> {{ id }}</span>
         </h2>
         <div class="ground">
-          <form @submit.prevent="addDish">
+          <form @submit.prevent="editDish">
             <div class="row">
               <div class="col-md-6 col-12 mb-4">
                 <label>Dish name</label>
@@ -26,10 +27,16 @@
               </div>
               <div class="col-md-6 col-12 mb-4">
                 <label>Category</label>
-                <select v-model="state.category">
-                  <option value="10">Fish</option>
-                  <option value="5">Burger</option>
+                <select v-model="state.category" v-if="state.categories.length">
+                  <option
+                    :value="cat._id"
+                    v-for="cat in state.categories"
+                    :key="cat._id"
+                  >
+                    {{ cat.name }}
+                  </option>
                 </select>
+                <p class="alert alert-danger" v-else>You have no categories</p>
                 <span class="text-danger fw-bold" v-if="v$.category.$error">
                   {{ v$.category.$errors[0].$message }}
                 </span>
@@ -50,59 +57,143 @@
                     }
                   "
                 />
-                <span class="text-danger fw-bold" v-if="v$.img.$error">
-                  {{ v$.img.$errors[0].$message }}
-                </span>
               </div>
             </div>
             <div class="text-center mt-5 w-100">
-              <button class="m-auto">Add</button>
+              <button class="m-auto">Update</button>
             </div>
           </form>
         </div>
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, numeric } from "@vuelidate/validators";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { toast } from "vue3-toastify";
+import axios from "axios";
+
 export default {
-  components: { SideBar, Header },
+  components: { SideBar, Header, SpinnerLoading },
   props: {
     id: String,
   },
-  setup() {
+  setup(props) {
+    const store = useStore();
+    const router = useRouter();
     const state = reactive({
       product: "",
       img: "",
       price: "",
       category: "",
+      loading: false,
+      categories: [],
+      user: computed(() => store.state.user),
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+
+      // fetching categories
+      state.loading = true;
+
+      try {
+        const res = await axios.get("/api-dashboard/category/");
+        state.categories = res.data.categories;
+      } catch (err) {
+        toast.error(err.response.data.message);
+      }
+
+      // fetching the dish
+
+      try {
+        const dishRes = await axios.get("/api-dashboard/dishes/" + props.id);
+        const dish = dishRes.data.dish;
+
+        state.product = dish.name;
+        state.price = dish.price;
+        state.category = dish.category;
+      } catch (err) {
+        toast.error("something went wrong, please try again later");
+      }
+
+      state.loading = false;
     });
 
     const rules = computed(() => {
       return {
         product: { required },
         category: { required },
-        img: { required },
         price: { required, numeric },
       };
     });
 
     const v$ = useVuelidate(rules, state);
 
-    const addDish = async () => {
+    const editDish = async () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        const data = {
+          name: state.product,
+          price: state.price,
+          category: state.category,
+          image: state.img,
+        };
+        state.loading = true;
+        try {
+          const res = await axios.put(
+            "/api-dashboard/dishes/" + props.id,
+            data,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          if (res.status == 200) {
+            toast.success("Dish updated successfully", {
+              autoClose: 2000,
+            });
+          } else {
+            const err = res.response.data.errors;
+            if (err) {
+              for (var prop in err) {
+                if (err[prop]) {
+                  toast.error(err[prop]);
+                }
+              }
+            } else {
+              toast.error("Something went wrong, please try again later");
+            }
+          }
+        } catch (err) {
+          toast.error("Something went wrong, please try again later");
+        }
+
+        state.loading = false;
       } else {
+        toast.error("Invalid or missing data", {
+          autoClose: 1500,
+        });
       }
     };
 
-    return { state, v$, addDish };
+    return { state, v$, editDish };
   },
 };
 </script>

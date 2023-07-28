@@ -1,15 +1,11 @@
 <template>
   <div class="cat-list">
-    <input
-      type="search"
-      class="search my-5"
-      placeholder="search for category"
-    />
     <table>
       <thead>
         <th>ID</th>
         <th>Picture</th>
         <th>Category</th>
+        <th></th>
       </thead>
       <tbody v-if="categories.length">
         <Category

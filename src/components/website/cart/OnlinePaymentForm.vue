@@ -8,6 +8,24 @@
     @submit.prevent="buy"
   >
     <div class="input-field">
+      <label for="">Address</label>
+      <input
+        type="text"
+        placeholder="name on the card"
+        v-model="state.address"
+      />
+      <span class="text-danger" v-if="v$.address.$error">
+        {{ v$.address.$errors[0].$message }}
+      </span>
+    </div>
+    <div class="input-field">
+      <label for="">Phone Number</label>
+      <input type="text" placeholder="name on the card" v-model="state.phone" />
+      <span class="text-danger" v-if="v$.phone.$error">
+        {{ v$.phone.$errors[0].$message }}
+      </span>
+    </div>
+    <div class="input-field">
       <label for="">Name on card</label>
       <input type="text" placeholder="name on the card" v-model="state.name" />
       <span class="text-danger" v-if="v$.name.$error">
@@ -49,17 +67,24 @@
 import { useVuelidate } from "@vuelidate/core";
 import { required, minLength, maxLength } from "@vuelidate/validators";
 import { reactive, computed } from "vue";
+import { toast } from "vue3-toastify";
 export default {
-  setup() {
+  emits: ["complete"],
+
+  setup(props, ctx) {
     const state = reactive({
       name: "",
       cardNumber: "",
       expirationDate: "",
       cvc: "",
+      address: "",
+      phone: "",
     });
     const rules = computed(() => {
       return {
         name: { required },
+        address: { required },
+        phone: { required, minLength: minLength(11), maxLength: maxLength(11) },
         cardNumber: {
           required,
           minLength: minLength(16),
@@ -74,7 +99,18 @@ export default {
     const buy = () => {
       v$.value.$validate();
       if (!v$.value.$error) {
+        const data = {
+          name: state.name,
+          address: state.address,
+          phone: state.phone,
+          cardNumber: state.cardNumber,
+          expirationDate: state.expirationDate,
+          cvc: state.cvc,
+        };
+
+        ctx.emit("complete", data);
       } else {
+        toast.error("Invalid credentials");
       }
     };
 

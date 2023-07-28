@@ -5,23 +5,75 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-solid fa-clipboard-list me-2 fa-bounce"></i>Customers
+          <i class="fa-solid fa-clipboard-list me-2 fa-bounce"></i>Users
         </h2>
         <div class="ground">
           <div class="up-area"></div>
-          <UsersList />
+          <input
+            type="search"
+            class="search my-5"
+            placeholder="search for a user"
+            v-model="state.searchItem"
+            @keyup="search(state.searchItem)"
+          />
+          <UsersList :users="state.display" />
         </div>
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
 import UsersList from "../../../components/dashboard/users/UsersList.vue";
+import { reactive, computed, onMounted } from "vue";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import { toast } from "vue3-toastify";
+import axios from "axios";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 export default {
-  components: { SideBar, Header, UsersList },
+  components: { SideBar, Header, UsersList, SpinnerLoading },
+  setup() {
+    const store = useStore();
+    const router = useRouter();
+    const state = reactive({
+      user: computed(() => store.state.user),
+      loading: false,
+      users: [],
+      display: [],
+      searchItem: "",
+    });
+
+    onMounted(async () => {
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+      state.loading = true;
+
+      try {
+        const res = await axios.get("/api-dashboard/users/");
+        state.users = res.data.users;
+        state.display = state.users;
+      } catch (err) {
+        toast.error("Something went wrong, please try again later");
+      }
+
+      state.loading = false;
+    });
+    const search = (key) => {
+      state.display = state.users.filter((user) =>
+        user.name.toLowerCase().includes(key.toLowerCase())
+      );
+    };
+    return { state, search };
+  },
 };
 </script>
 <style lang="scss" scoped>
