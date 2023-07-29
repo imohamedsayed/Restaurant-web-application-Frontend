@@ -4,17 +4,23 @@
     <main class="has-scrollbar">
       <Header />
       <div class="container">
-        <div class="row justify-content-between">
+        <div class="row justify-content-between" v-if="state.user">
           <div class="col-lg-4 col-md-4 col-12">
-            <ProfilePic />
+            <ProfilePic :existImage="state.user.image" />
           </div>
           <div class="col-lg-8 col-md-6 col-12">
             <div class="info">
-              <ChangeName />
-              <ChangeEmail />
+              <ChangeName :existName="state.user.name" />
+              <ChangeEmail :existEmail="state.user.email" />
               <ChangePassword />
             </div>
           </div>
+        </div>
+        <div class="not-authorized text-center" v-else>
+          <img src="../../assets/settings.svg" class="img-fluid" alt="" />
+          <h1>You are not allowed to access this page</h1>
+          <h5>Login to your account so you can see your account settings</h5>
+          <button @click="$router.push('/login')">Login</button>
         </div>
       </div>
     </main>
@@ -28,6 +34,8 @@ import ProfilePic from "@/components/website/settings/ProfilePic.vue";
 import ChangeName from "@/components/website/settings/ChangeName.vue";
 import ChangeEmail from "@/components/website/settings/ChangeEmail.vue";
 import ChangePassword from "@/components/website/settings/ChangePassword.vue";
+import { useStore } from "vuex";
+import { computed, reactive } from "vue";
 export default {
   components: {
     SideBar,
@@ -36,6 +44,14 @@ export default {
     ChangeName,
     ChangeEmail,
     ChangePassword,
+  },
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      user: computed(() => store.state.user),
+    });
+
+    return { state };
   },
 };
 </script>
@@ -108,6 +124,37 @@ export default {
               font-size: 1.2rem;
             }
           }
+        }
+      }
+    }
+    .not-authorized {
+      img {
+        width: 400px;
+      }
+      margin-top: 100px;
+      font-weight: bold;
+      h5 {
+        font-weight: 600;
+      }
+      button {
+        margin-top: 10px;
+        width: 120px;
+        height: 40px;
+        border: none;
+        outline: none;
+        background: linear-gradient(
+          to bottom right,
+          var(--light-orange),
+          var(--dark-orange)
+        );
+        opacity: 0.9;
+        border-radius: 10px;
+        color: white;
+        transition: all 0.3s ease;
+        &:hover {
+          opacity: 1;
+
+          font-size: 1.2rem;
         }
       }
     }

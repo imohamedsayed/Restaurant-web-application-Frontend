@@ -13,6 +13,11 @@
             <Bill :order="order" />
           </div>
         </div>
+        <div class="not-authorized text-center" v-else-if="!state.customer">
+          <img src="../../assets/biils.svg" class="img-fluid" alt="" />
+          <h1>You are not allowed to access this page</h1>
+          <h5>Login to your account so you can see your bills</h5>
+        </div>
         <div
           class="not-authorized text-center"
           v-else-if="!state.orders.length"
@@ -20,11 +25,6 @@
           <img src="../../assets/noBills.svg" class="img-fluid" alt="" />
           <h1>You have no bills</h1>
           <h5>Add items to your cart and complete your orders</h5>
-        </div>
-        <div class="not-authorized text-center" v-else-if="!state.customer">
-          <img src="../../assets/biils.svg" class="img-fluid" alt="" />
-          <h1>You are not allowed to access this page</h1>
-          <h5>Login to your account so you can see your bills</h5>
         </div>
       </div>
     </main>

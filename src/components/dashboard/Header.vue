@@ -74,6 +74,7 @@ header {
         border-radius: 50px;
         width: 50px !important;
         margin-right: 10px;
+        height: 50px;
       }
     }
     .info {

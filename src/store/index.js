@@ -32,6 +32,15 @@ const mutations = {
   setCart(state, data) {
     state.cart = data;
   },
+  setUserName(state, name) {
+    state.user.name = name;
+  },
+  setUserEmail(state, email) {
+    state.user.email = email;
+  },
+  setUserImage(state, path) {
+    state.user.image = path;
+  },
 };
 
 const actions = {
@@ -103,6 +112,20 @@ const actions = {
   },
   emptyCart(context) {
     context.commit("setCart", []);
+  },
+
+  updateUser(context, { user }) {
+    console.log(user);
+    context.commit("setUser", user);
+  },
+  updateName(context, { name }) {
+    context.commit("setUserName", name);
+  },
+  updateEmail(context, { email }) {
+    context.commit("setUserEmail", email);
+  },
+  updateImage(context, { path }) {
+    context.commit("setUserImage", path);
   },
 };
 

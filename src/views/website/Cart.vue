@@ -130,11 +130,13 @@ export default {
       state.cart.forEach((c) => items.push({ _id: c._id, qty: c.qty }));
 
       const data = {
-        userId: state.user._id,
         receiver: userInfo,
         total: total._value + 75,
         items,
       };
+      if (state.user) {
+        data.userId = state.user._id;
+      }
       try {
         const res = await axios.post("/api/orders", data);
 

@@ -6,7 +6,7 @@
     <div class="public">
       <div class="d-flex align-items-center" v-if="state.customer">
         <div class="img me-2">
-          <img src="../../assets/user.jpg" alt="" />
+          <img :src="'http://localhost:8000/' + state.customer.image" alt="" />
         </div>
         <div class="info pe-2">
           <p class="m-0 fw-bold">{{ state.customer.name }}</p>
@@ -136,6 +136,7 @@ header {
         border-radius: 50px;
         width: 50px !important;
         margin-right: 10px;
+        height: 50px;
       }
     }
     .info {
