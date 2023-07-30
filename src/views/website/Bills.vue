@@ -60,7 +60,6 @@ export default {
             toast.error("you are not authorized ");
           } else {
             state.orders = res.data.orders;
-            console.log(res.data.orders);
           }
         } catch (err) {
           toast.error("something went wrong, please try again later");

@@ -178,7 +178,7 @@ const routes = [
     },
   },
   {
-    path: "/dashboard/orders/bill/:id",
+    path: "/dashboard/orders/:id/bill",
     name: "Bill",
     props: true,
     component: Bill,

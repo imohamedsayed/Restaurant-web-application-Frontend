@@ -1,6 +1,5 @@
 <template>
   <div class="cat-list">
-   
     <table>
       <thead>
         <th>ID</th>
@@ -8,8 +7,15 @@
         <th>Total</th>
         <th>Options</th>
       </thead>
-      <tbody>
-        <Order />
+      <tbody v-if="orders.length">
+        <Order v-for="order in orders" :key="order._id" :order="order" />
+      </tbody>
+      <tbody v-else>
+        <tr>
+          <td colspan="4">
+            <p class="alert alert-info">We have no orders till now</p>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -18,6 +24,7 @@
 <script>
 import Order from "./Order.vue";
 export default {
+  props: ["orders"],
   components: { Order },
 };
 </script>

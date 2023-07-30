@@ -5,15 +5,16 @@
       <Header />
       <div class="container">
         <h2 class="mb-5">
-          <i class="fa-solid fa-file-invoice-dollar me-3 fa-bounce"></i>Bill
-          #778745
+          <i class="fa-solid fa-file-invoice-dollar me-3 fa-bounce"></i>Bill #{{
+            id
+          }}
         </h2>
         <div class="ground">
-          <div class="up-area" style="letter-spacing: 5px">
-            <h4>Origin : 350$</h4>
-            <h4>Taxes : 14$</h4>
-            <h4>Service : 25$</h4>
-            <h2 class="mt-2 p-2">Total : 390$</h2>
+          <div class="up-area" style="letter-spacing: 5px" v-if="state.order">
+            <h4>Origin : {{ state.order.total - 75 }}$</h4>
+            <h4>Taxes : 25$</h4>
+            <h4>Service : 50$</h4>
+            <h2 class="mt-2 p-2">Total : {{ state.order.total }}$</h2>
             <hr />
           </div>
           <table>
@@ -25,22 +26,97 @@
               <th>Quantity</th>
               <th>total</th>
             </thead>
-            <tbody>
-              <Bill />
+            <tbody v-if="state.items.length">
+              <Bill v-for="item in state.items" :key="item._id" :item="item" />
+            </tbody>
+            <tbody v-else>
+              <tr>
+                <td colspan="6">
+                  <p class="alert alert-warning">
+                    <span class="spinner-grow spinner-grow-sm me-3"></span
+                    >Loading bill items
+                  </p>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
     </main>
   </div>
+  <teleport to="body"> <SpinnerLoading :loading="state.loading" /> </teleport>
 </template>
 
 <script>
 import SideBar from "@/components/dashboard/SideBar.vue";
 import Header from "@/components/dashboard/Header.vue";
 import Bill from "../../../components/dashboard/orders/Bill.vue";
+import { useRouter } from "vue-router";
+import { reactive, computed, onMounted } from "vue";
+import axios from "axios";
+import { useStore } from "vuex";
+import SpinnerLoading from "@/components/SpinnerLoading.vue";
+import { toast } from "vue3-toastify";
+
 export default {
-  components: { SideBar, Header, Bill },
+  props: ["id"],
+  components: { SideBar, Header, Bill, SpinnerLoading },
+  setup(props) {
+    const store = useStore();
+    const router = useRouter();
+    const state = reactive({
+      user: computed(() => store.state.user),
+      items: [],
+      loading: false,
+      order: "",
+    });
+
+    onMounted(async () => {
+      state.loading = true;
+      if (!state.user) {
+        router.push("/");
+      } else {
+        if (!state.user.role) {
+          router.push("/");
+        }
+      }
+
+      try {
+        const res = await axios.get("/api-dashboard/orders/" + props.id);
+
+        if (res.status == 200) {
+          state.order = res.data.order;
+        } else {
+          toast.error(res.data.message);
+        }
+      } catch (err) {
+        toast.error("Something went wrong when fetching order data");
+      }
+      try {
+        const itemRes = await axios.get(
+          "/api-dashboard/orders/items/" + props.id
+        );
+
+        if (itemRes.status == 200) {
+          const itemsInOrder = itemRes.data.items;
+
+          itemsInOrder.forEach(async (item) => {
+            const product = await axios.get("/api/dishes/" + item._id);
+            item.product = product.data.dish;
+            state.items.push(item);
+          });
+        } else {
+          toast.error(itemRes.data.message);
+        }
+      } catch (err) {
+        toast.error("Something went wrong when fetching order data");
+      }
+
+      state.loading = false;
+    });
+
+    return { state };
+  },
 };
 </script>
 <style lang="scss" scoped>

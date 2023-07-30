@@ -98,6 +98,17 @@ export default {
         );
       }
 
+      try {
+        const order_res = await axios.get("/api-dashboard/orders/stats");
+
+        state.orderNo = order_res.data.orders;
+        state.revenue = order_res.data.revenue;
+      } catch (err) {
+        toast.warning(
+          "something went wrong when getting orders and revenue stats, try again later"
+        );
+      }
+
       state.loading = false;
     });
 

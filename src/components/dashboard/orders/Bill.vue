@@ -3,39 +3,30 @@
     <td class="check" @click="opened = !opened">
       <i v-if="opened" class="fa fa-circle-plus plus me-2"></i>
       <i v-else class="fa-solid fa-circle-minus minus me-2"></i>
-      #779261
+      #{{ item._id.substring(0, 6) }}..
     </td>
-    <td>Boiled Shrimp</td>
+    <td>{{ item.product.name }}</td>
     <td class="d-none d-lg-table-cell">
-      <img src="../../../assets/dishes/shrimp.jpg" alt="" />
+      <img :src="'http://localhost:8000/' + item.product.image" alt="" />
     </td>
-    <td class="open d-none d-md-table-cell">$25</td>
-    <td class="open">4</td>
-    <td class="open">$100</td>
+    <td class="open d-none d-md-table-cell">${{ item.product.price }}</td>
+    <td class="open">{{ item.qty }}</td>
+    <td class="open">{{ item.product.price * item.qty }}</td>
   </tr>
   <tr class="close naming" v-if="!opened">
     <td colspan="9">
       <ul>
-        <li>items's Id: <span>#777521</span></li>
+        <li>
+          items's Id: <span>#{{ item._id }}</span>
+        </li>
       </ul>
-    </td>
-  </tr>
-
-  <tr v-if="!opened && dell">
-    <td colspan="9">
-      <div class="close">
-        <ul class="options">
-          <li class="btn text-danger">
-            <i class="fa fa-trash"></i> Remove from bill
-          </li>
-        </ul>
-      </div>
     </td>
   </tr>
 </template>
 
 <script>
 export default {
+  props: ["item"],
   data() {
     return {
       opened: true,
